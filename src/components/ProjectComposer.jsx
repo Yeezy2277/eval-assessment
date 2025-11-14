@@ -35,7 +35,7 @@ function ProjectComposer({ onCreate, isBusy }) {
   };
 
   return (
-    <form className="composer-card" onSubmit={handleSubmit}>
+    <form className="composer-card" onSubmit={handleSubmit} aria-label="Quick add project">
       <div className="composer-header">
         <div>
           <p className="composer-label">Quick add</p>

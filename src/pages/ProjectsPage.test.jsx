@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProjectsPage from './ProjectsPage.jsx';
 
@@ -69,9 +69,11 @@ describe('ProjectsPage', () => {
       </MemoryRouter>
     );
 
-    await user.type(screen.getByLabelText(/project name/i), 'Gamma Launch');
-    await user.type(screen.getByLabelText(/^owner/i), 'Growth');
-    await user.click(screen.getByRole('button', { name: /add project/i }));
+    const [composer] = screen.getAllByRole('form', { name: /quick add project/i });
+    const composerUtils = within(composer);
+    await user.type(composerUtils.getByLabelText(/project name/i), 'Gamma Launch');
+    await user.type(composerUtils.getByLabelText(/^owner/i), 'Growth');
+    await user.click(composerUtils.getByRole('button', { name: /add project/i }));
 
     await waitFor(() => expect(mockCreateProject).toHaveBeenCalled());
     expect(mockCreateProject).toHaveBeenCalledWith(
@@ -81,7 +83,7 @@ describe('ProjectsPage', () => {
         status: 'planning'
       })
     );
-    expect(screen.getByLabelText(/project name/i)).toHaveValue('');
+    expect(composerUtils.getByLabelText(/project name/i)).toHaveValue('');
   });
 });
 
